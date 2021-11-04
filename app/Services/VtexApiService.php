@@ -50,8 +50,8 @@ class VtexApiService
     public function getData()
     {
 
-        $date_one = gmDate("2016-01-01\T02:00:00\.000\Z");
-        $date_two = gmDate("2021-01-01\T01:59:59\.999\Z");
+        $date_one = gmdate("Y-m-d\TH:m:i.u\Z", mktime(2, 0, 0, 1, 1, 2016));
+        $date_two = gmdate("Y-m-d\TH:m:i.u\Z", mktime(2, 59, 59, 1, 1, 2021));
         //date_format(date_create('01 Jan 2021'), 'c');
 
         $query = [
