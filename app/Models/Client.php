@@ -14,9 +14,7 @@ class Client extends Model
         'number_client',
         'lastname',
         'firstname',
-        'documentType',
-        'document',
-        'phone'
+        'email'
 
     ];
 

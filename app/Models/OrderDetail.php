@@ -9,6 +9,15 @@ class OrderDetail extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+
+        'id',
+        'product_id',
+        'ref_id',
+        'quantity',
+        'name'
+    ];
+
     /**
      * @return belongsTo
      */

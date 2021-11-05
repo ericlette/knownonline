@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Http\Helpers\ParseParamsHelper;
+use App\Http\Helpers\ParseHelper;
 use App\Models\Order;
 use App\Repositories\OrderRepo;
 use GuzzleHttp\Client as GuzzleClient;
@@ -35,7 +35,7 @@ class VtexApiService
     private $orderRepo;
 
     /**
-     * @var ParseParamsHelper
+     * @var ParseHelper
      */
 
     private $parseHelper;
@@ -44,7 +44,7 @@ class VtexApiService
      * @param GuzzleClient $client
      */
 
-    public function __construct(GuzzleClient $client, OrderRepo $orderRepo, ParseParamsHelper $parseHelper)
+    public function __construct(GuzzleClient $client, OrderRepo $orderRepo, ParseHelper $parseHelper)
     {
         $this->client = $client;
         $this->orderRepo = $orderRepo;
@@ -55,6 +55,9 @@ class VtexApiService
 
     }
 
+    /**
+     * @return array
+     */
     public function getData()
     {
         $date_start = "2021-01-01 03:45:27.612584";
@@ -63,18 +66,22 @@ class VtexApiService
 
         $query = $this->parseHelper->parseParams($date_start, $date_end, $status);
 
-        $array = [];
+        $array_order_details = [];
         foreach ($this->getOrderList($query) as $key => $value) {
 
             $order = $this->getOrder($value['orderId']);
-            array_push($array, $this->parseHelper->parseArray($value['orderId'], $order));
+            array_push($array_order_details, $this->parseHelper->parseArray($value['orderId'], $value['totalValue'], $order));
 
         }
 
-        return $array;
+        return $array_order_details;
     }
 
-    protected function getOrderList(array $query): array
+    /**
+     * @param array $query
+     * @return array
+     */
+    protected function getOrderList(array $query)
     {
         $response = $this->client->request('GET', $this->url_orders_list,
             ['headers' => $this->header, 'query' => $query]);
@@ -83,7 +90,11 @@ class VtexApiService
         return $array_order_list['list'];
     }
 
-    protected function getOrder($order_id): array
+    /**
+     * @param string $order_id
+     * @return array $order
+     */
+    protected function getOrder(string $order_id)
     {
         $response = $this->client->request('GET', $this->url_order_detail . $order_id,
             ['headers' => $this->header]);

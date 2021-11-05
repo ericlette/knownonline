@@ -18,9 +18,7 @@ class CreateClientsTable extends Migration
             $table->string('number_client');
             $table->string('lastname');
             $table->string('firstname');
-            $table->string('documentType');
-            $table->string('document');
-            $table->string('phone');
+            $table->string('email');
             $table->timestamps();
         });
     }

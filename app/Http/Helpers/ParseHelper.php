@@ -4,18 +4,16 @@ namespace App\Http\Helpers;
 
 use Carbon\Carbon;
 
-class ParseParamsHelper
+class ParseHelper
 {
-
     /**
      * @param String $date_start
      * @param String $date_end
      * @param String $status
      * @return array
      */
-    public function parseParams(String $date_start, String $date_end, String $status): array
+    public function parseParams(String $date_start, String $date_end, String $status)
     {
-
         $date_one = Carbon::createFromFormat('Y-m-d H:i:s.u', $date_start)->toISOString();
         $date_two = Carbon::createFromFormat('Y-m-d H:i:s.u', $date_end)->toISOString();
 
@@ -26,21 +24,20 @@ class ParseParamsHelper
         ];
 
         return $query;
-
     }
 
     /**
-     * @param String $order_id
+     * @param string $order_id
+     * @param string $valueTotal
      * @param array $array
      * @return array
      */
-    public function parseArray(string $order_id, array $array): array
+    public function parseArray(string $order_id, string $valueTotal, array $array)
     {
-
         $payload = [
             'order' => [
                 'order_id' => $order_id,
-                'importe_total' => $this->parseTotal($array['totals'])
+                'importe_total' => $valueTotal
             ],
             'items' => $this->parseItems($array['items']),
             'payment_data' => $this->parsePayment($array['paymentData']['transactions']),
@@ -52,24 +49,9 @@ class ParseParamsHelper
 
     /**
      * @param array $array
-     * @return float
-     */
-
-    protected function parseTotal(array $totals): float
-    {
-        $total = 0;
-        foreach ($totals as $key => $value) {
-            $total += $value['value'];
-        }
-
-        return $total;
-    }
-
-    /**
-     * @param array $array
      * @return array
      */
-    protected function parseItems(array $items): array
+    protected function parseItems(array $items)
     {
         $array = [];
         foreach ($items as $key => $value) {
@@ -81,16 +63,15 @@ class ParseParamsHelper
                     'quantity' => $value['quantity'],
                     'ref_id' => $value['refId']
                 ]);
-
         }
         return $array;
     }
 
     /**
-     * @param array $array
+     * @param array $payment
      * @return array
      */
-    protected function parsePayment(array $payment): array
+    protected function parsePayment(array $payment)
     {
         $array = [];
         $cont = 0;
@@ -109,21 +90,18 @@ class ParseParamsHelper
     }
 
     /**
-     * @param array $array
+     * @param array $client
      * @return array
      */
-    protected function parseClients(array $client): array
+    protected function parseClients(array $client)
     {
         $array = [];
-
         array_push($array,
             [
                 'number_client' => $client['id'],
                 'lastname' => $client['lastName'],
                 'firstname' => $client['firstName'],
-                'documentType' => $client['documentType'],
-                'document' => $client['document'],
-                'phone' => $client['phone']
+                'email' => $client['email']
             ]);
 
         return $array;
