@@ -4,7 +4,7 @@ Pasos para ejecutar correctamente el challenge
 
 2. Instalar composer
 
-3. Ejecutar el comando " Composer update "
+3. Ejecutar el comando " composer install "
 
 4. Posicionarse en el proyecto laravel y correr el servidor por defecto con el comando " php artisan serve "
 
