@@ -70,6 +70,7 @@ class scheduleOrders extends Command
         $this->orderDetailRepo = $orderDetailRepo;
         $this->orderPaymentRepo = $orderPaymentRepo;
         $this->clientRepo = $clientRepo;
+
     }
 
     /**
@@ -92,11 +93,15 @@ class scheduleOrders extends Command
                 $order_payment = $this->orderPaymentRepo->store($order, $value['payment_data']);
 
                 DB::commit();
-                $this->info('The command was successful!');
-            } catch (\Exception$e) {
+                $this->info('The query was successful!');
+
+            } catch (\Exception $e) {
                 DB::rollback();
-                $this->error('Something went wrong!');
+                $this->info('The query did not run correctly');
             }
         }
+
+        $this->info('The command  was  successful!');
+
     }
 }

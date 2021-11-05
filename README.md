@@ -6,15 +6,13 @@ Pasos para ejecutar correctamente el challenge
 
 3. Ejecutar el comando " composer install "
 
-4. Posicionarse en el proyecto laravel y correr el servidor por defecto con el comando " php artisan serve "
+4. Crear una base de datos nueva y conectar con el proyecto de laravel.
 
-5. Crear una base de datos nueva y conectar con el proyecto de laravel.
+5. Ejecutar las migraciones para la BD con el comando " php artisan migrate "
 
-6. Ejecutar las migraciones para la BD con el comando " php artisan migrate "
+6. Colocar las credenciales de la API en el archivo .env
 
-7. Colocar las credenciales de la API en el archivo .env
-
-8. Por ultimo, correr el comando: "php artisan command:api-vtex "
+7. Por ultimo, correr el comando: "php artisan command:api-vtex "
 
 Si todo salio como se esperaba, en su terminal debera ver un mensaje como el siguiente:
 

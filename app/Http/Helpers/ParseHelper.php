@@ -14,7 +14,7 @@ class ParseHelper
      */
     public function parseParams(String $date_start, String $date_end, String $status)
     {
-        $date_one = Carbon::parse($date_start)->toISOString(); //
+        $date_one = Carbon::parse($date_start)->toISOString();
         $date_two = Carbon::parse($date_end)->toISOString();
 
         $query = [
