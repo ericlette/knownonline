@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Repositories\OrderDetailRepo;
+use App\Repositories\OrderPaymentRepo;
+use App\Repositories\OrderRepo;
 use App\Services\VtexApiService;
 use Illuminate\Console\Command;
 
@@ -19,7 +22,7 @@ class scheduleOrders extends Command
      *
      * @var string
      */
-    protected $description = 'Get data from API VTEX';
+    protected $description = 'Get data from vtex api and save to database';
 
     /**
      *
@@ -28,14 +31,36 @@ class scheduleOrders extends Command
     protected $vtexService;
 
     /**
+     *
+     * @var OrderRepo
+     */
+    protected $orderRepo;
+
+    /**
+     *
+     * @var OrderDetailRepo
+     */
+    protected $orderDetailRepo;
+
+    /**
+     *
+     * @var OrderPaymentRepo
+     */
+    protected $orderPaymentRepo;
+
+    /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(VtexApiService $vtexService)
-    {
+    public function __construct(VtexApiService $vtexService, OrderRepo $orderRepo, OrderDetailRepo $orderDetailRepo,
+        OrderPaymentRepo $orderPaymentRepo) {
+
         parent::__construct();
         $this->vtexService = $vtexService;
+        $this->orderRepo = $orderRepo;
+        $this->orderDetailRepo = $orderDetailRepo;
+        $this->orderPaymentRepo = $orderPaymentRepo;
     }
 
     /**
@@ -45,7 +70,16 @@ class scheduleOrders extends Command
      */
     public function handle()
     {
-        echo $this->vtexService->getData();
-        //return Command::SUCCESS;
+        $data = $this->vtexService->getData();
+
+        foreach ($data as $key => $value) {
+
+            $order = $this->orderRepo->store($value['order']);
+            $order_detail = $this->orderDetailRepo->store($order, $value['items']);
+            $order_payment = $this->orderPaymentRepo->store($order, $value['payment_data']);
+        }
+
+        dd("temrihno");
+
     }
 }

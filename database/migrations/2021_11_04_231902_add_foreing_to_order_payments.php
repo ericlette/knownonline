@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrdersTable extends Migration
+class AddForeingToOrderPayments extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,10 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->string('number_order');
-            $table->double('total');
-            $table->boolean('processed')->default('0');
-            $table->timestamps();
+        Schema::table('order_payments', function (Blueprint $table) {
+            $table->foreignId('order_id')->constrained();
+            $table->foreignId('payment_method_id')->constrained();
+
         });
     }
 
@@ -29,6 +27,8 @@ class CreateOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::table('order_payments', function (Blueprint $table) {
+            //
+        });
     }
 }

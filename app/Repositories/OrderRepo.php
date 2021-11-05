@@ -17,12 +17,14 @@ class OrderRepo
     /**
      * @return Order|mixed
      */
-    public function store()
+    public function store(array $array)
     {
 
-        $Order = $this->getModel();
-        $Order->save();
+        $order = $this->getModel();
+        $order->number_order = $array['order_id'];
+        $order->total = $array['importe_total'];
+        $order->save();
 
-        return $Order;
+        return $order;
     }
 }

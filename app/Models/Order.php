@@ -8,4 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
+
+    /**
+     * @return BelongsToMany
+     */
+    public function payments()
+    {
+        return $this->belongsToMany(PaymentMethod::class, 'order_payments');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
 }
