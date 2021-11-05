@@ -14,8 +14,8 @@ class ParseHelper
      */
     public function parseParams(String $date_start, String $date_end, String $status)
     {
-        $date_one = Carbon::createFromFormat('Y-m-d H:i:s.u', $date_start)->toISOString();
-        $date_two = Carbon::createFromFormat('Y-m-d H:i:s.u', $date_end)->toISOString();
+        $date_one = Carbon::parse($date_start)->toISOString(); //
+        $date_two = Carbon::parse($date_end)->toISOString();
 
         $query = [
             'f_creationDate' => "creationDate:[{$date_one} TO {$date_two}]",

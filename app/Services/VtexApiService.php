@@ -60,8 +60,8 @@ class VtexApiService
      */
     public function getData()
     {
-        $date_start = "2021-01-01 03:45:27.612584";
-        $date_end = date('Y-m-d H:i:s.612584');
+        $date_start = "2021-01-01 02:00:00";
+        $date_end = date('Y-m-d H:i:s');
         $status = 'ready-for-handling';
 
         $query = $this->parseHelper->parseParams($date_start, $date_end, $status);
