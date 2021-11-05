@@ -24,4 +24,12 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
 }

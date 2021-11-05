@@ -118,7 +118,7 @@ class ParseParamsHelper
 
         array_push($array,
             [
-                'id' => $client['id'],
+                'number_client' => $client['id'],
                 'lastname' => $client['lastName'],
                 'firstname' => $client['firstName'],
                 'documentType' => $client['documentType'],
