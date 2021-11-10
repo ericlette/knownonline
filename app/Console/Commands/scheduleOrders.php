@@ -2,13 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Repositories\ClientRepo;
-use App\Repositories\OrderDetailRepo;
-use App\Repositories\OrderPaymentRepo;
-use App\Repositories\OrderRepo;
-use App\Services\VtexApiService;
+use App\Services\MainService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class scheduleOrders extends Command
 {
@@ -28,48 +23,20 @@ class scheduleOrders extends Command
 
     /**
      *
-     * @var VtexApiService
+     * @var MainService
      */
-    protected $vtexService;
-
-    /**
-     *
-     * @var OrderRepo
-     */
-    protected $orderRepo;
-
-    /**
-     *
-     * @var OrderDetailRepo
-     */
-    protected $orderDetailRepo;
-
-    /**
-     *
-     * @var OrderPaymentRepo
-     */
-    protected $orderPaymentRepo;
-
-    /**
-     *
-     * @var ClientRepo
-     */
-    protected $clientRepo;
+    protected $mainService;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(VtexApiService $vtexService, OrderRepo $orderRepo, OrderDetailRepo $orderDetailRepo,
-        OrderPaymentRepo $orderPaymentRepo, ClientRepo $clientRepo) {
+    public function __construct(MainService $mainService)
+    {
 
         parent::__construct();
-        $this->vtexService = $vtexService;
-        $this->orderRepo = $orderRepo;
-        $this->orderDetailRepo = $orderDetailRepo;
-        $this->orderPaymentRepo = $orderPaymentRepo;
-        $this->clientRepo = $clientRepo;
+        $this->mainService = $mainService;
 
     }
 
@@ -80,28 +47,9 @@ class scheduleOrders extends Command
      */
     public function handle()
     {
-        $data = $this->vtexService->getData();
-
-        foreach ($data as $key => $value) {
-
-            DB::beginTransaction();
-
-            try {
-                $client = $this->clientRepo->store($value['data_client']);
-                $order = $this->orderRepo->store($value['order'], $client);
-                $order_detail = $this->orderDetailRepo->store($order, $value['items']);
-                $order_payment = $this->orderPaymentRepo->store($order, $value['payment_data']);
-
-                DB::commit();
-                $this->info('The query was successful!');
-
-            } catch (\Exception $e) {
-                DB::rollback();
-                $this->info('The query did not run correctly');
-            }
-        }
-
-        $this->info('The command  was  successful!');
+        $this->mainService->handle()
+            ? $this->info('The command was successful!')
+            : $this->info('The command was not executed correctly check the log');
 
     }
 }
